@@ -46,7 +46,7 @@ def add_student():
     return jsonify({
         "success": True,
         "message": "Student added successfully",
-        "id": id
+        "id": student.id
     })
 
 @student_routes.route('/api/students/<int:id>', methods=['PUT'])
