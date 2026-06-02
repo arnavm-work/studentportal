@@ -7,6 +7,8 @@ class Student(db.Model):
     email = db.Column(db.String(100), nullable=False, unique=True)
     course = db.Column(db.String(100), nullable=False)
 
+    
+
     def to_dict(self):
         return {
             "id": self.id,
