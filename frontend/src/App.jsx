@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import StudentList from "./components/StudentList";
 
 function App() {
   const [students, setStudents] = useState([]);
@@ -160,16 +161,8 @@ function App() {
       <button type="submit">Update Student</button>
     </form>
     <hr />
-    <h2>Student List</h2>
-          {students.map(student => (
-            <div key={student.id}>
-              <h2>{student.id}: {student.name}</h2>
-              {/* <p>{student.email}</p>
-              <p>{student.course}</p> */}
-            </div>
-          ))}   
+    <StudentList students = {students} />
     </div>
-    
   )
 }
 
