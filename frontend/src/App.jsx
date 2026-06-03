@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import StudentList from "./components/StudentList";
+import { getStudents, createStudent, deleteStudent, updateStudent } from "./services/studentApi";
 
 function App() {
   const [students, setStudents] = useState([]);
@@ -11,38 +12,62 @@ function App() {
   const [updateName, setUpdateName] = useState("");
   const [updateEmail, setUpdateEmail] = useState("");
   const [updateCourse, setUpdateCourse] = useState("");
+  const [editinngId, setEditingId] = useState(null);
 
-  console.log(students);
-
-  function fetchStudents() {
-
-  fetch("http://127.0.0.1:5000/api/students")
-    .then(response => response.json())
+  const performDelete = (id) => {
+    const confirmDelete = window.confirm(`Are you sure you want to delete student with ID ${id}?`);
+    if (!confirmDelete) {
+      return;
+    }
+    deleteStudent(id)
     .then(data => {
       console.log(data);
+      fetchStudents();
+      });  
+  };
+ 
+  const handleEditClick = (student) => {
+  setUpdateId(student.id);
+  setUpdateName(student.name);
+  setUpdateEmail(student.email);
+  setUpdateCourse(student.course);
+  };
+
+
+  const handleAddRow = () => {
+    createStudent({
+      name: "New Student",
+      email: "example@example.com",
+      course: "example course"
+    })
+    .then(data => {
+
+      fetchStudents();
+    });
+  }
+
+  function fetchStudents() {
+  getStudents()
+    .then(data => {;
       setStudents(data.students);
     });
    }
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetch("http://127.0.0.1:5000/api/students", {
-      method: "POST",
-      headers: { 
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ name, email, course })
+    createStudent({
+      name,
+      email,
+      course
     })
-    .then(response => response.json())
+
     .then(data => {
       console.log(data);
-
       fetchStudents();
-
       setName("");
       setEmail("");
       setCourse("");
-  });
+    });
   }
   
   const handeDelete = (event) => {
@@ -51,16 +76,10 @@ function App() {
       return;
     }
     event.preventDefault();
-    fetch(`http://127.0.0.1:5000/api/students/${deleteId}`, {
-      method: "DELETE"
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      fetchStudents();
+    performDelete(deleteId);
       setDeleteId("");
-    });
-  }
+    };
+  
 
   const handleUpdate = (event) => {
     if (!updateId) {
@@ -68,29 +87,25 @@ function App() {
       return;
     }
     event.preventDefault();
-    fetch(`http://127.0.0.1:5000/api/students/${updateId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ 
-        name: updateName, 
-        email: updateEmail, 
-        course: updateCourse })
+    updateStudent(updateId, {
+      name: updateName,
+      email: updateEmail,
+      course: updateCourse
     })
-    .then(response => response.json())
     .then(data => {
       console.log(data);
-      
-      fetchStudents();  
-      
+
+      fetchStudents();
+
       setUpdateId("");
       setUpdateName("");
       setUpdateEmail("");
       setUpdateCourse("");
     });
   }
-
+  
+  console.log(students);
+  
   useEffect(() => {
     fetchStudents();
   }, []);
@@ -161,7 +176,8 @@ function App() {
       <button type="submit">Update Student</button>
     </form>
     <hr />
-    <StudentList students = {students} />
+    <button onClick={handleAddRow}>Add Row</button>
+    <StudentList students = {students} performDelete={performDelete} handleEditClick={handleEditClick}  />
     </div>
   )
 }
