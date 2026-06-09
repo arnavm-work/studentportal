@@ -1,33 +1,46 @@
+const API_URL = "http://127.0.0.1:5000/api/students";
+const getHeaders = () => ({
+  "Content-Type": "application/json"
+});
+
 export async function getStudents() {
-    const response = await fetch("http://127.0.0.1:5000/api/students");
+    const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error("Failed to fetch students");
+  }
     return response.json();
    }
 
 export async function createStudent(student) {
-    const response = await fetch("http://127.0.0.1:5000/api/students", {
+    const response = await fetch(API_URL, {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json"
-      },
+      headers: getHeaders(),
       body: JSON.stringify(student)
     })
-  return response.json();   
+    if (!response.ok) {
+    throw new Error("Failed to fetch students");
+  }
+    return response.json();   
 };
 
 export async function deleteStudent(deleteId) {
-    const response = await fetch(`http://127.0.0.1:5000/api/students/${deleteId}`, {
+    const response = await fetch(`${API_URL}/${deleteId}`, {
       method: "DELETE"
     });
+    if (!response.ok) {
+    throw new Error("Failed to fetch students");
+  }
     return response.json();
   }
 
 export async function updateStudent(updateId, student) {
-    const response = await fetch(`http://127.0.0.1:5000/api/students/${updateId}`, {
+    const response = await fetch(`${API_URL}/${updateId}`, {
       method: "PUT",
-      headers: {    
-        "Content-Type": "application/json"
-      },
+      headers: getHeaders(),
       body: JSON.stringify(student)
     });
+    if (!response.ok) {
+    throw new Error("Failed to fetch students");
+  }
     return response.json();
   }

@@ -6,7 +6,7 @@ import "ag-grid-community/styles/ag-theme-alpine.css";
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
-function StudentList({ students, performDelete, editingId, setEditingId, handleSave }) {
+function StudentList({ students, handleDelete, editingId, setEditingId, handleSave }) {
   const columnDefs = [
     { field: "id" },
     { field: "name",
@@ -38,7 +38,7 @@ function StudentList({ students, performDelete, editingId, setEditingId, handleS
               Edit
             </button>
 
-            <button className="delete-btn" onClick={() => performDelete(params.data.id)} >
+            <button className="delete-btn" onClick={() => handleDelete(params.data.id)} >
               Delete
             </button>
           </div>
