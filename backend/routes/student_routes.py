@@ -1,11 +1,13 @@
 from models.student_model import Student
 from flask import request, jsonify, Blueprint
 from database.db import db
+from flask_jwt_extended import jwt_required
 
 student_routes = Blueprint('student_routes', __name__)
 
 
 @student_routes.route('/api/students', methods=['GET'])
+@jwt_required()
 def get_students():
     students = Student.query.all()
     students_data = [student.to_dict() for student in students]
@@ -16,6 +18,7 @@ def get_students():
     })
 
 @student_routes.route('/api/students/<int:id>', methods=['GET'])
+@jwt_required()
 def get_student(id):
     student = Student.query.get(id)
     if not student:

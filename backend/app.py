@@ -5,11 +5,15 @@ from routes.student_routes import student_routes
 from models.user_model import User
 from routes.auth_routes import auth_routes
 from database.bcrypt import bcrypt
+from flask_jwt_extended import JWTManager
+
 
 
 app = Flask(__name__)
 CORS(app)
 bcrypt.init_app(app)
+jwt = JWTManager(app)
+app.config['JWT_SECRET_KEY'] = "student_portal_secret_key"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root321@localhost/student_portal'
 db.init_app(app)
 with app.app_context():

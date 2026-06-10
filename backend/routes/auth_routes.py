@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from models.user_model import User
 from database.db import db
 from database.bcrypt import bcrypt
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 
 auth_routes = Blueprint('auth_routes', __name__)
 
@@ -49,8 +50,10 @@ def login():
             "success": False,
             "message": "Invalid email or password"
         }), 401
+    access_token = create_access_token(identity=str(user.id))
     return jsonify({
         "success": True,
         "message": "Login successful",
-        "user": user.to_dict()
+        "user": user.to_dict(),
+        "token": access_token
     }), 200
