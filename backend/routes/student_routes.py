@@ -1,7 +1,7 @@
 from models.student_model import Student
 from flask import request, jsonify, Blueprint
 from database.db import db
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 student_routes = Blueprint('student_routes', __name__)
 
@@ -9,6 +9,7 @@ student_routes = Blueprint('student_routes', __name__)
 @student_routes.route('/api/students', methods=['GET'])
 @jwt_required()
 def get_students():
+    print("JWT Identity:", get_jwt_identity())  # Debugging line to check JWT identity
     students = Student.query.all()
     students_data = [student.to_dict() for student in students]
     return jsonify({

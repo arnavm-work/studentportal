@@ -1,15 +1,18 @@
 const API_URL = "http://127.0.0.1:5000/api/students";
 const getHeaders = () => ({
-  "Content-Type": "application/json"
+  "Content-Type": "application/json",
+  "Authorization": `Bearer ${localStorage.getItem("token")}`
 });
 
 export async function getStudents() {
-    const response = await fetch(API_URL);
-    if (!response.ok) {
-      throw new Error("Failed to fetch students");
+  const response = await fetch(API_URL, {
+    headers: getHeaders()
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch students");
   }
-    return response.json();
-   }
+  return response.json();
+}
 
 export async function createStudent(student) {
     const response = await fetch(API_URL, {

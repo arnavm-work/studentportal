@@ -10,11 +10,12 @@ from flask_jwt_extended import JWTManager
 
 
 app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = "student_portal_secret_key"
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root321@localhost/student_portal'
 CORS(app)
 bcrypt.init_app(app)
 jwt = JWTManager(app)
-app.config['JWT_SECRET_KEY'] = "student_portal_secret_key"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:root321@localhost/student_portal'
+
 db.init_app(app)
 with app.app_context():
     db.create_all()
